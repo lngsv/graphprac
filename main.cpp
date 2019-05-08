@@ -84,12 +84,23 @@ int main()
     std::vector<Vertex> vertices;
     std::vector<GLushort> emptyInds = {};
     // triangle
+    // vertex + texture map(0..1)
     vertices = {
         {{-1.0, -sqrt(3.0)/3.0, 0.0}, {0.0, 0.0}},
         {{ 1.0, -sqrt(3.0)/3.0, 0.0}, {1.0, 0.0}},
-        {{ 0.0, 2.0 * sqrt(3.0)/3.0, 0.0}, {0.5, sqrt(3.0)/4.0}}
+        {{ 0.0, 2.0 * sqrt(3.0)/3.0, 0.0}, {0.5, sqrt(3.0)/4.0}}, 
     };
     Mesh meshTriangle(vertices, emptyInds);
+
+    vertices = {
+        {{ -1.0, -1.0, 0.0 }, {}}, 
+        {{ -1.0, 1.0, 0.0 }, {}}, 
+        {{ 1.0, 1.0, 0.0 }, {}}, 
+        {{ 1.0, 1.0, 0.0 }, {}}, 
+        {{ 1.0, -1.0, 0.0 }, {}}, 
+        {{ -1.0, -1.0, 0.0 }, {}}
+    };
+    Mesh meshSquare(vertices, emptyInds);
 
     Shader shaderBasic("shaders/basic.vert", "shaders/basic.frag");
     shaderBasic.SetUniform("myColor", glm::vec4(0.3, 1.0, 0.1, 1.0));
@@ -97,7 +108,10 @@ int main()
     glm::vec3 trRotAxis = glm::normalize(glm::vec3{1.0, 0.3, 1.5});
     float trRotAngle = 0.0; // in radians
 
-    
+    glm::vec3 sqPos = {-3.5, 0.0, 0.0};
+    glm::vec3 sqRotAxis = glm::normalize(glm::vec3{3.3, 1.2, 0.1});
+    float sqRotAngle = 0.0; // in radians
+
     glClearColor(0.0, 0.0, 0.0, 1.0);
 
     // main loop
@@ -110,6 +124,10 @@ int main()
 
         trPos.x = std::sin(curTime);
         trRotAngle += deltaTime * 2.0;
+
+        sqPos.y = std::sin(curTime);
+        sqRotAngle += deltaTime * 2.0;
+
         // Render
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         // fullTransform = P * V * M
@@ -118,15 +136,32 @@ int main()
                 static_cast<float>(screenWidth) / screenHeight,
                 0.1f, 100.0f);
         // V = View
-        PV = glm::translate(PV, glm::vec3(0.0, 0.0, -10.0));
+        PV = glm::translate(PV, glm::vec3(0.0, 0.0, -15.0));
         // M = Model
+        
+    
+
+        // triangle
+        shaderBasic.SetUniform("myColor", glm::vec4(0.3, 1.0, 0.1, 1.0));
         glm::mat4 transMat = glm::translate(PV, trPos);
         transMat = glm::rotate(transMat, trRotAngle, trRotAxis);
         shaderBasic.SetUniform("transformMat", transMat);
 
         shaderBasic.Use();
         meshTriangle.Draw();
+
+        // square
+        shaderBasic.SetUniform("myColor", glm::vec4(1.0, 0.0, 0.0, 1.0));
+        transMat = glm::translate(PV, sqPos);
+        transMat = glm::rotate(transMat, sqRotAngle, sqRotAxis);
+        shaderBasic.SetUniform("transformMat", transMat);
+
+        shaderBasic.Use();
+        meshSquare.Draw();
+        
         glfwSwapBuffers(window);
+
+
     }
 
     glfwDestroyWindow(window);
