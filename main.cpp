@@ -93,12 +93,12 @@ int main()
     Mesh meshTriangle(vertices, emptyInds);
 
     vertices = {
-        {{ -1.0, -1.0, 0.0 }, {}}, 
-        {{ -1.0, 1.0, 0.0 }, {}}, 
-        {{ 1.0, 1.0, 0.0 }, {}}, 
-        {{ 1.0, 1.0, 0.0 }, {}}, 
-        {{ 1.0, -1.0, 0.0 }, {}}, 
-        {{ -1.0, -1.0, 0.0 }, {}}
+        {{ -1.0, -1.0, 0.0 }, {0.0, 0.0}}, 
+        {{ -1.0, 1.0, 0.0 }, {0.0, 1.0}}, 
+        {{ 1.0, 1.0, 0.0 }, {1.0, 1.0}}, 
+        {{ 1.0, 1.0, 0.0 }, {1.0, 1.0}}, 
+        {{ 1.0, -1.0, 0.0 }, {1.0, 0.0}}, 
+        {{ -1.0, -1.0, 0.0 }, {0.0, 0.0}}
     };
     Mesh meshSquare(vertices, emptyInds);
 
@@ -111,6 +111,10 @@ int main()
     glm::vec3 sqPos = {-3.5, 0.0, 0.0};
     glm::vec3 sqRotAxis = glm::normalize(glm::vec3{3.3, 1.2, 0.1});
     float sqRotAngle = 0.0; // in radians
+
+    Shader shaderTextured("shaders/textured.vert", "shaders/textured.frag");
+    shaderTextured.SetUniform("texture0", 0);
+    Texture textureMetal("textures/metal.jpg");
 
     glClearColor(0.0, 0.0, 0.0, 1.0);
 
@@ -151,12 +155,12 @@ int main()
         meshTriangle.Draw();
 
         // square
-        shaderBasic.SetUniform("myColor", glm::vec4(1.0, 0.0, 0.0, 1.0));
         transMat = glm::translate(PV, sqPos);
         transMat = glm::rotate(transMat, sqRotAngle, sqRotAxis);
-        shaderBasic.SetUniform("transformMat", transMat);
 
-        shaderBasic.Use();
+        shaderTextured.SetUniform("transformMat", transMat);
+        shaderTextured.Use();
+        textureMetal.Bind();
         meshSquare.Draw();
         
         glfwSwapBuffers(window);
