@@ -4,7 +4,6 @@ CFLAGS=-c -g -std=gnu++17 -Wall -Wextra
 LFLAGS=-lGL -lglfw -lGLEW -lpthread
 
 OBJS=main.o \
-	 ReadMesh.o \
 	 Shader.o \
 	 Texture.o \
 	 Mesh.o \

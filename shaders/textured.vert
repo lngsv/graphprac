@@ -5,10 +5,10 @@ layout (location = 1) in vec2 texCoord;
 
 out vec2 fragTexCoord;
 
-uniform mat4 fullTransform;
+uniform mat4 transformMat;
 
 void main()
 {
     fragTexCoord = texCoord;
-    gl_Position = fullTransform * vec4(pos.xyz, 1.0);
+    gl_Position = transformMat * vec4(pos.xyz, 1.0);
 }

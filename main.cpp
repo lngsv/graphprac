@@ -49,9 +49,9 @@ int main()
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     /* Create a windowed mode window and its OpenGL context */
-    int screenWidth = 1200;
-    int screenHeight = 720;
-    GLFWwindow *window = glfwCreateWindow(screenWidth, screenHeight, "Computer Graphics", NULL, NULL);
+    int screenWidth = 1900;
+    int screenHeight = 1210;
+    GLFWwindow *window = glfwCreateWindow(screenWidth, screenHeight, "Screensaver", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -83,72 +83,72 @@ int main()
     // Init meshes
     std::vector<Vertex> vertices;
     std::vector<GLushort> emptyInds = {};
+
     // triangle
     // vertex + texture map(0..1)
     vertices = {
-        {{-1.0, -sqrt(3.0)/3.0, 0.0}, {0.0, 0.0}},
-        {{ 1.0, -sqrt(3.0)/3.0, 0.0}, {1.0, 0.0}},
-        {{ 0.0, 2.0 * sqrt(3.0)/3.0, 0.0}, {0.5, sqrt(3.0)/4.0}}, 
+        {{-1.0, -sqrt(3.0)/3.0, 0.0 }, {}},
+        {{ 1.0, -sqrt(3.0)/3.0, 0.0 }, {}},
+        {{ 0.0, 2.0 * sqrt(3.0)/3.0, 0.0 }, {}}, 
     };
     Mesh meshTriangle(vertices, emptyInds);
 
     vertices = {
-        {{ -1.0, -1.0, 0.0 }, {}}, 
-        {{ -1.0, 1.0, 0.0 }, {}}, 
-        {{ 1.0, 1.0, 0.0 }, {}}, 
-        {{ 1.0, 1.0, 0.0 }, {}}, 
-        {{ 1.0, -1.0, 0.0 }, {}}, 
-        {{ -1.0, -1.0, 0.0 }, {}}
+        {{ -1.0, -1.0, 0.0 }, {0.0, 0.0 }}, 
+        {{ -1.0, 1.0, 0.0 }, {0.0, 1.0}}, 
+        {{ 1.0, 1.0, 0.0 }, {1.0, 1.0}}, 
+        {{ 1.0, 1.0, 0.0 }, {1.0, 1.0}}, 
+        {{ 1.0, -1.0, 0.0 }, {1.0, 0.0 }}, 
+        {{ -1.0, -1.0, 0.0 }, {0.0, 0.0 }}
     };
     Mesh meshSquare(vertices, emptyInds);
 
     vertices = {
-        {{-0.5f, -0.5f, -0.5f},  {0.0f, 0.0f}},
-        {{0.5f, -0.5f, -0.5f},  {1.0f, 0.0f}},
-        {{0.5f,  0.5f, -0.5f},  {1.0f, 1.0f}},
-        {{0.5f,  0.5f, -0.5f},  {1.0f, 1.0f}},
-        {{-0.5f,  0.5f, -0.5f},  {0.0f, 1.0f}},
-        {{-0.5f, -0.5f, -0.5f},  {0.0f, 0.0f}},
+        {{ -1.0, -1.0, -1.0 },  {0.0, 0.0 }},
+        {{1.0, -1.0, -1.0 },  {1.0, 0.0 }},
+        {{1.0,  1.0, -1.0 },  {1.0, 1.0 }},
+        {{1.0,  1.0, -1.0 },  {1.0, 1.0 }},
+        {{-1.0,  1.0, -1.0 },  {0.0, 1.0 }},
+        {{-1.0, -1.0, -1.0 },  {0.0, 0.0 }},
 
-        {{-0.5f, -0.5f,  0.5f},  {0.0f, 0.0f}},
-        {{0.5f, -0.5f,  0.5f},  {1.0f, 0.0f}},
-        {{0.5f,  0.5f,  0.5f},  {1.0f, 1.0f}},
-        {{0.5f,  0.5f,  0.5f},  {1.0f, 1.0f}},
-        {{-0.5f,  0.5f,  0.5f},  {0.0f, 1.0f}},
-        {{-0.5f, -0.5f,  0.5f},  {0.0f, 0.0f}},
+        {{-1.0, -1.0,  1.0 },  {0.0, 0.0 }},
+        {{1.0, -1.0,  1.0 },  {1.0, 0.0 }},
+        {{1.0,  1.0,  1.0 },  {1.0, 1.0 }},
+        {{1.0,  1.0,  1.0 },  {1.0, 1.0 }},
+        {{-1.0,  1.0,  1.0 },  {0.0, 1.0 }},
+        {{-1.0, -1.0,  1.0 },  {0.0, 0.0 }},
 
-        {{-0.5f,  0.5f,  0.5f},  {1.0f, 0.0f}},
-        {{-0.5f,  0.5f, -0.5f},  {1.0f, 1.0f}},
-        {{-0.5f, -0.5f, -0.5f},  {0.0f, 1.0f}},
-        {{-0.5f, -0.5f, -0.5f},  {0.0f, 1.0f}},
-        {{-0.5f, -0.5f,  0.5f},  {0.0f, 0.0f}},
-        {{-0.5f,  0.5f,  0.5f},  {1.0f, 0.0f}},
+        {{-1.0,  1.0,  1.0 },  {1.0, 0.0 }},
+        {{-1.0,  1.0, -1.0 },  {1.0, 1.0 }},
+        {{-1.0, -1.0, -1.0 },  {0.0, 1.0 }},
+        {{-1.0, -1.0, -1.0 },  {0.0, 1.0 }},
+        {{-1.0, -1.0,  1.0 },  {0.0, 0.0 }},
+        {{-1.0,  1.0,  1.0 },  {1.0, 0.0 }},
 
-        {{0.5f,  0.5f,  0.5f},  {1.0f, 0.0f}},
-        {{0.5f,  0.5f, -0.5f},  {1.0f, 1.0f}},
-        {{0.5f, -0.5f, -0.5f},  {0.0f, 1.0f}},
-        {{0.5f, -0.5f, -0.5f},  {0.0f, 1.0f}},
-        {{0.5f, -0.5f,  0.5f},  {0.0f, 0.0f}},
-        {{0.5f,  0.5f,  0.5f},  {1.0f, 0.0f}},
+        {{1.0,  1.0,  1.0 },  {1.0, 0.0 }},
+        {{1.0,  1.0, -1.0 },  {1.0, 1.0 }},
+        {{1.0, -1.0, -1.0 },  {0.0, 1.0 }},
+        {{1.0, -1.0, -1.0 },  {0.0, 1.0 }},
+        {{1.0, -1.0,  1.0 },  {0.0, 0.0 }},
+        {{1.0,  1.0,  1.0 },  {1.0, 0.0 }},
 
-        {{-0.5f, -0.5f, -0.5f},  {0.0f, 1.0f}},
-        {{0.5f, -0.5f, -0.5f},  {1.0f, 1.0f}},
-        {{0.5f, -0.5f,  0.5f},  {1.0f, 0.0f}},
-        {{0.5f, -0.5f,  0.5f},  {1.0f, 0.0f}},
-        {{-0.5f, -0.5f,  0.5f},  {0.0f, 0.0f}},
-        {{-0.5f, -0.5f, -0.5f},  {0.0f, 1.0f}},
+        {{-1.0, -1.0, -1.0 },  {0.0, 1.0 }},
+        {{1.0, -1.0, -1.0 },  {1.0, 1.0 }},
+        {{1.0, -1.0,  1.0 },  {1.0, 0.0 }},
+        {{1.0, -1.0,  1.0 },  {1.0, 0.0 }},
+        {{-1.0, -1.0,  1.0 },  {0.0, 0.0 }},
+        {{-1.0, -1.0, -1.0 },  {0.0, 1.0 }},
 
-        {{-0.5f,  0.5f, -0.5f},  {0.0f, 1.0f}},
-        {{0.5f,  0.5f, -0.5f},  {1.0f, 1.0f}},
-        {{0.5f,  0.5f,  0.5f},  {1.0f, 0.0f}},
-        {{0.5f,  0.5f,  0.5f},  {1.0f, 0.0f}},
-        {{-0.5f,  0.5f,  0.5f},  {0.0f, 0.0f}},
-        {{-0.5f,  0.5f, -0.5f},  {0.0f, 1.0}}
+        {{-1.0,  1.0, -1.0 },  {0.0, 1.0 }},
+        {{1.0,  1.0, -1.0 },  {1.0, 1.0 }},
+        {{1.0,  1.0,  1.0 },  {1.0, 0.0 }},
+        {{1.0,  1.0,  1.0 },  {1.0, 0.0 }},
+        {{-1.0,  1.0,  1.0 },  {0.0, 0.0 }},
+        {{-1.0,  1.0, -1.0 },  {0.0, 1.0}}
     };
     Mesh meshCube(vertices, emptyInds);
 
     Shader shaderBasic("shaders/basic.vert", "shaders/basic.frag");
-    //shaderBasic.SetUniform("myColor", glm::vec4(0.3, 1.0, 0.1, 1.0));
     
     glm::vec3 trPos = {0.0, 0.0, 0.0};
     glm::vec3 trRotAxis = glm::normalize(glm::vec3{1.0, 0.3, 1.5});
@@ -162,7 +162,17 @@ int main()
     glm::vec3 cubeRotAxis = glm::normalize(glm::vec3{1.0, 1.0, -1.0});
     float cubeRotAngle = 0.0; // in radians
 
+    Shader shaderTextured("shaders/textured.vert", "shaders/textured.frag");
+    shaderTextured.SetUniform("texture0", 0);
+    Texture textureMetal("textures/metal.jpg");
+    Texture textureCmc("textures/cmc.png");
+
+    Shader shaderBg("shaders/background.vert", "shaders/textured.frag");
+    shaderBg.SetUniform("texture0", 0);
+    Texture textureBg("textures/bg.jpg");
+
     glClearColor(0.0, 0.0, 0.0, 1.0);
+    
 
     // main loop
     while (glfwWindowShouldClose(window) == GL_FALSE) {
@@ -186,13 +196,17 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         // fullTransform = P * V * M
         // P = Projection
-        glm::mat4 PV = glm::perspective(static_cast<float>(glm::radians(45.0)),
-                static_cast<float>(screenWidth) / screenHeight,
+        glm::mat4 PV = glm::perspective((float)glm::radians(45.0),
+                (float)(screenWidth) / screenHeight,
                 0.1f, 100.0f);
         // V = View
         PV = glm::translate(PV, glm::vec3(0.0, 0.0, -15.0));
         // M = Model
         
+        // background
+        shaderBg.Use();
+        textureBg.Bind();
+        meshSquare.Draw();
     
 
         // triangle
@@ -205,21 +219,22 @@ int main()
         meshTriangle.Draw();
 
         // square
-        shaderBasic.SetUniform("myColor", glm::vec4(1.0, 0.0, 0.0, 1.0));
         transMat = glm::translate(PV, sqPos);
         transMat = glm::rotate(transMat, sqRotAngle, sqRotAxis);
-        shaderBasic.SetUniform("transformMat", transMat);
+        shaderTextured.SetUniform("transformMat", transMat);
 
-        shaderBasic.Use();
+        shaderTextured.Use();
+        textureMetal.Bind();
         meshSquare.Draw();
         
         // cube
-        shaderBasic.SetUniform("myColor", glm::vec4(0.0, 0.0, 1.0, 1.0));
+        //shaderBasic.SetUniform("myColor", glm::vec4(0.0, 0.0, 1.0, 1.0));
         transMat = glm::translate(PV, cubePos);
         transMat = glm::rotate(transMat, cubeRotAngle, cubeRotAxis);
-        shaderBasic.SetUniform("transformMat", transMat);
+        shaderTextured.SetUniform("transformMat", transMat);
 
-        shaderBasic.Use();
+        shaderTextured.Use();
+        textureCmc.Bind();
         meshCube.Draw();
 
 
