@@ -16,6 +16,9 @@
 #include <cstdlib>
 #include <ctime>
 
+using namespace std;
+using namespace glm;
+
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 void debugCallback(GLenum source,
         GLenum type,
@@ -26,20 +29,19 @@ void debugCallback(GLenum source,
         const void *userParam)
 {
     if (severity != GL_DEBUG_SEVERITY_NOTIFICATION) {
-        std::cerr << "OpenGL debug. Message: " << std::endl <<
-            std::string(message, length) << std::endl;
+        cerr << "OpenGL debug. Message: " << endl <<
+            string(message, length) << endl;
     }
 }
 #pragma GCC diagnostic pop
 
-extern std::pair<std::vector<Vertex>, std::vector<GLushort>> ReadMesh(const std::string &path);
+extern pair<vector<Vertex>, vector<GLushort>> ReadMesh(const string &path);
 
 
 int main()
 {
     srand(time(nullptr));
 
-    /* Initialize the library */
     if (!glfwInit())
         return -1;
 
@@ -49,8 +51,7 @@ int main()
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     /* Create a windowed mode window and its OpenGL context */
-    int screenWidth = 1900;
-    int screenHeight = 1210;
+    int screenWidth = 1900, screenHeight = 1210;
     GLFWwindow *window = glfwCreateWindow(screenWidth, screenHeight, "Screensaver", NULL, NULL);
     if (!window)
     {
@@ -61,31 +62,35 @@ int main()
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
-    /* Init GLEW */
     if (glewInit() != GLEW_OK) {
-        std::cerr << "Error!" << std::endl;
+        cerr << "Error!" << endl;
     }
 
     const char *ver = (const char *) glGetString(GL_VERSION);
-    std::cout << ver << std::endl;
+    cout << ver << endl;
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glEnable(GL_DEPTH_TEST);
 
     // Set the debug callback function
     // TODO: DISABLE THIS FOR RELEASE
     glEnable(GL_DEBUG_OUTPUT);
     glDebugMessageCallback(debugCallback, nullptr);
 
-    glEnable(GL_DEPTH_TEST);
-
     double prevTime;
     double curTime = prevTime = glfwGetTime();
     double deltaTime = 0.0;
 
     // Init meshes
-    std::vector<Vertex> vertices;
-    std::vector<GLushort> emptyInds = {};
+    vector<Vertex> vertices;
+    vector<GLushort> emptyInds = {};
+
+    // Loading mesh from file
+    //FILE *f = fopen
+
 
     // triangle
-    // vertex + texture map(0..1)
     vertices = {
         {{-1.0, -sqrt(3.0)/3.0, 0.0 }, {}},
         {{ 1.0, -sqrt(3.0)/3.0, 0.0 }, {}},
@@ -150,25 +155,25 @@ int main()
 
     Shader shaderBasic("shaders/basic.vert", "shaders/basic.frag");
     
-    glm::vec3 trPos = {0.0, 0.0, 0.0};
-    glm::vec3 trRotAxis = glm::normalize(glm::vec3{1.0, 0.3, 1.5});
+    vec3 trPos = {0.0, 0.0, 0.0};
+    vec3 trRotAxis = normalize(vec3{1.0, 0.3, 1.5});
     float trRotAngle = 0.0; // in radians
 
-    glm::vec3 sqPos = {-3.5, 0.0, 0.0};
-    glm::vec3 sqRotAxis = glm::normalize(glm::vec3{3.3, 1.2, 0.1});
+    vec3 sqPos = {-1.5, 0.0, 0.0};
+    vec3 sqRotAxis = normalize(vec3{3.3, 1.2, 0.1});
     float sqRotAngle = 0.0; // in radians
 
-    glm::vec3 cubePos = {7.0, 1.0, 0.0};
-    glm::vec3 cubeRotAxis = glm::normalize(glm::vec3{1.0, 1.0, -1.0});
+    vec3 cubePos = {7.0, 1.0, 2.0};
+    vec3 cubeRotAxis = normalize(vec3{1.0, 1.0, -1.0});
     float cubeRotAngle = 0.0; // in radians
 
     Shader shaderTextured("shaders/textured.vert", "shaders/textured.frag");
-    shaderTextured.SetUniform("texture0", 0);
+    shaderTextured.SetUniform("tex", 0);
     Texture textureMetal("textures/metal.jpg");
     Texture textureCmc("textures/cmc.png");
 
     Shader shaderBg("shaders/background.vert", "shaders/textured.frag");
-    shaderBg.SetUniform("texture0", 0);
+    shaderBg.SetUniform("tex", 0);
     Texture textureBg("textures/bg.jpg");
 
     glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -182,26 +187,26 @@ int main()
         curTime = glfwGetTime();
         deltaTime = curTime - prevTime;
 
-        trPos.x = std::sin(curTime);
+        trPos.x = sin(curTime);
         trRotAngle += deltaTime * 2.0;
 
-        sqPos.y = std::sin(curTime);
+        sqPos.y = sin(curTime);
         sqRotAngle += deltaTime * 2.0;
 
-        cubePos.x = 5.0 + std::cos(curTime);
-        cubePos.y = 0.0 + std::sin(curTime);
+        cubePos.x = 5.0 + cos(curTime);
+        cubePos.y = 0.0 + sin(curTime);
         cubeRotAngle += deltaTime * 4.0;
 
         // Render
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        // fullTransform = P * V * M
-        // P = Projection
-        glm::mat4 PV = glm::perspective((float)glm::radians(45.0),
+        // P * V * M
+        // Projection
+        mat4 PV = perspective((float)radians(45.0),
                 (float)(screenWidth) / screenHeight,
                 0.1f, 100.0f);
-        // V = View
-        PV = glm::translate(PV, glm::vec3(0.0, 0.0, -15.0));
-        // M = Model
+        // View
+        PV = translate(PV, vec3(0.0, 0.0, -15.0));
+        // Model
         
         // background
         shaderBg.Use();
@@ -210,17 +215,17 @@ int main()
     
 
         // triangle
-        shaderBasic.SetUniform("myColor", glm::vec4(0.3, 1.0, 0.1, 1.0));
-        glm::mat4 transMat = glm::translate(PV, trPos);
-        transMat = glm::rotate(transMat, trRotAngle, trRotAxis);
+        shaderBasic.SetUniform("myColor", vec4(0.3, 1.0, 0.1, 0.5));
+        mat4 transMat = translate(PV, trPos);
+        transMat = rotate(transMat, trRotAngle, trRotAxis);
         shaderBasic.SetUniform("transformMat", transMat);
 
         shaderBasic.Use();
         meshTriangle.Draw();
 
         // square
-        transMat = glm::translate(PV, sqPos);
-        transMat = glm::rotate(transMat, sqRotAngle, sqRotAxis);
+        transMat = translate(PV, sqPos);
+        transMat = rotate(transMat, sqRotAngle, sqRotAxis);
         shaderTextured.SetUniform("transformMat", transMat);
 
         shaderTextured.Use();
@@ -228,9 +233,9 @@ int main()
         meshSquare.Draw();
         
         // cube
-        //shaderBasic.SetUniform("myColor", glm::vec4(0.0, 0.0, 1.0, 1.0));
-        transMat = glm::translate(PV, cubePos);
-        transMat = glm::rotate(transMat, cubeRotAngle, cubeRotAxis);
+        //shaderBasic.SetUniform("myColor", vec4(1.0, 1.0, 1.0, 1.0));
+        transMat = translate(PV, cubePos);
+        transMat = rotate(transMat, cubeRotAngle, cubeRotAxis);
         shaderTextured.SetUniform("transformMat", transMat);
 
         shaderTextured.Use();

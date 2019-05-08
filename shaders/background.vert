@@ -5,6 +5,7 @@ layout (location = 1) in vec2 texCoord;
 
 out vec2 fragTexCoord;
 
+
 void main()
 {
     fragTexCoord = texCoord;

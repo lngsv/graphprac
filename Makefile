@@ -19,5 +19,5 @@ clean:
 $(TARGET): $(OBJS)
 	$(LD) $^ -o $@ $(LFLAGS)
 
-%.o: %.cpp
+%.o: %.cpp shaders/*
 	$(CC) $(CFLAGS) $< -o $@
