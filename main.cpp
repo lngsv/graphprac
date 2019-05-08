@@ -102,8 +102,54 @@ int main()
     };
     Mesh meshSquare(vertices, emptyInds);
 
+    vertices = {
+        {{-0.5f, -0.5f, -0.5f},  {0.0f, 0.0f}},
+        {{0.5f, -0.5f, -0.5f},  {1.0f, 0.0f}},
+        {{0.5f,  0.5f, -0.5f},  {1.0f, 1.0f}},
+        {{0.5f,  0.5f, -0.5f},  {1.0f, 1.0f}},
+        {{-0.5f,  0.5f, -0.5f},  {0.0f, 1.0f}},
+        {{-0.5f, -0.5f, -0.5f},  {0.0f, 0.0f}},
+
+        {{-0.5f, -0.5f,  0.5f},  {0.0f, 0.0f}},
+        {{0.5f, -0.5f,  0.5f},  {1.0f, 0.0f}},
+        {{0.5f,  0.5f,  0.5f},  {1.0f, 1.0f}},
+        {{0.5f,  0.5f,  0.5f},  {1.0f, 1.0f}},
+        {{-0.5f,  0.5f,  0.5f},  {0.0f, 1.0f}},
+        {{-0.5f, -0.5f,  0.5f},  {0.0f, 0.0f}},
+
+        {{-0.5f,  0.5f,  0.5f},  {1.0f, 0.0f}},
+        {{-0.5f,  0.5f, -0.5f},  {1.0f, 1.0f}},
+        {{-0.5f, -0.5f, -0.5f},  {0.0f, 1.0f}},
+        {{-0.5f, -0.5f, -0.5f},  {0.0f, 1.0f}},
+        {{-0.5f, -0.5f,  0.5f},  {0.0f, 0.0f}},
+        {{-0.5f,  0.5f,  0.5f},  {1.0f, 0.0f}},
+
+        {{0.5f,  0.5f,  0.5f},  {1.0f, 0.0f}},
+        {{0.5f,  0.5f, -0.5f},  {1.0f, 1.0f}},
+        {{0.5f, -0.5f, -0.5f},  {0.0f, 1.0f}},
+        {{0.5f, -0.5f, -0.5f},  {0.0f, 1.0f}},
+        {{0.5f, -0.5f,  0.5f},  {0.0f, 0.0f}},
+        {{0.5f,  0.5f,  0.5f},  {1.0f, 0.0f}},
+
+        {{-0.5f, -0.5f, -0.5f},  {0.0f, 1.0f}},
+        {{0.5f, -0.5f, -0.5f},  {1.0f, 1.0f}},
+        {{0.5f, -0.5f,  0.5f},  {1.0f, 0.0f}},
+        {{0.5f, -0.5f,  0.5f},  {1.0f, 0.0f}},
+        {{-0.5f, -0.5f,  0.5f},  {0.0f, 0.0f}},
+        {{-0.5f, -0.5f, -0.5f},  {0.0f, 1.0f}},
+
+        {{-0.5f,  0.5f, -0.5f},  {0.0f, 1.0f}},
+        {{0.5f,  0.5f, -0.5f},  {1.0f, 1.0f}},
+        {{0.5f,  0.5f,  0.5f},  {1.0f, 0.0f}},
+        {{0.5f,  0.5f,  0.5f},  {1.0f, 0.0f}},
+        {{-0.5f,  0.5f,  0.5f},  {0.0f, 0.0f}},
+        {{-0.5f,  0.5f, -0.5f},  {0.0f, 1.0}}
+    };
+    Mesh meshCube(vertices, emptyInds);
+
     Shader shaderBasic("shaders/basic.vert", "shaders/basic.frag");
-    shaderBasic.SetUniform("myColor", glm::vec4(0.3, 1.0, 0.1, 1.0));
+    //shaderBasic.SetUniform("myColor", glm::vec4(0.3, 1.0, 0.1, 1.0));
+    
     glm::vec3 trPos = {0.0, 0.0, 0.0};
     glm::vec3 trRotAxis = glm::normalize(glm::vec3{1.0, 0.3, 1.5});
     float trRotAngle = 0.0; // in radians
@@ -111,6 +157,10 @@ int main()
     glm::vec3 sqPos = {-3.5, 0.0, 0.0};
     glm::vec3 sqRotAxis = glm::normalize(glm::vec3{3.3, 1.2, 0.1});
     float sqRotAngle = 0.0; // in radians
+
+    glm::vec3 cubePos = {7.0, 1.0, 0.0};
+    glm::vec3 cubeRotAxis = glm::normalize(glm::vec3{1.0, 1.0, -1.0});
+    float cubeRotAngle = 0.0; // in radians
 
     glClearColor(0.0, 0.0, 0.0, 1.0);
 
@@ -127,6 +177,10 @@ int main()
 
         sqPos.y = std::sin(curTime);
         sqRotAngle += deltaTime * 2.0;
+
+        cubePos.x = 5.0 + std::cos(curTime);
+        cubePos.y = 0.0 + std::sin(curTime);
+        cubeRotAngle += deltaTime * 4.0;
 
         // Render
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -159,6 +213,16 @@ int main()
         shaderBasic.Use();
         meshSquare.Draw();
         
+        // cube
+        shaderBasic.SetUniform("myColor", glm::vec4(0.0, 0.0, 1.0, 1.0));
+        transMat = glm::translate(PV, cubePos);
+        transMat = glm::rotate(transMat, cubeRotAngle, cubeRotAxis);
+        shaderBasic.SetUniform("transformMat", transMat);
+
+        shaderBasic.Use();
+        meshCube.Draw();
+
+
         glfwSwapBuffers(window);
 
 
