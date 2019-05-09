@@ -9,11 +9,4 @@ struct Vertex
     glm::vec2 texCoords;
 };
 
-struct VertexN
-{
-    glm::vec3 pos;
-    glm::vec2 texCoords;
-    glm::vec3 normal;
-};
-
 #endif
